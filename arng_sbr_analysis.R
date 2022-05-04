@@ -1,7 +1,6 @@
 library(tidyverse)
 library(ggdist)
 library(gghalves)
-library(hrbrthemes)
 
 
 # Load Data ------------------
