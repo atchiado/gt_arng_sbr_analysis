@@ -36,10 +36,15 @@ ggplot(sbr, aes(SB_Recruiter, Total, fill = factor(SB_Recruiter), color = factor
 # Create a choropleth map grouped by sb recruiter status
 ggplot(merged_data, aes(x=long, y= lat, group = group)) +
   geom_polygon(aes_string(fill= "SB_Total"), size = 0.2) +
-  scale_fill_gradient(low = "#fffcdf", high = "#f1ce22", na.value = "white") +
+  scale_fill_gradient(low = "#fdfeea", high = "#ffe737", na.value = "white", limits = c(0, 50)) +
   new_scale_fill() + 
   geom_polygon(aes_string(fill= "No_SB_Total"), size = 0.2) +
-  scale_fill_gradient(low = "#f1f1f1", high = "#1c1c1c", na.value = "transparent")
+  scale_fill_gradient(low = "#f5f5f5", high = "#070707", na.value = "transparent", limits = c(0, 50)) +
+  theme_void() +
+  theme(text = element_text(color = "#22211d"),
+        plot.background = element_rect(fill = "grey98", color = NA),
+        panel.background = element_rect(fill = "grey98", color = NA),
+        legend.background = element_rect(fill = "grey98", color = NA))
 
 
 # Significance Testing ------------------
