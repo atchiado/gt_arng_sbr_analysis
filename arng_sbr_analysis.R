@@ -3,11 +3,16 @@ library(ggdist)
 library(gghalves)
 library(ggnewscale)
 library(maps)
+library(gridExtra)
 
 
 # Load Data ------------------
 sbr <- read.csv("~/Desktop/work/data/r/gt_arng_sbr_analysis/arng_sb_data.csv")
 long_lat <- map_data("state")
+
+
+# Merge Data --------------------
+merged_data <- inner_join(sbr, long_lat, by = c("State" = "region"))
 
 
 # Data Viz --------------------
@@ -29,12 +34,12 @@ ggplot(sbr, aes(SB_Recruiter, Total, fill = factor(SB_Recruiter), color = factor
         plot.background = element_rect(fill = "grey98"))
 
 # Create a choropleth map grouped by sb recruiter status
-ggplot(sbr, aes(x = long, y = lat, group = group)) +
+ggplot(merged_data, aes(x=long, y= lat, group = group)) +
   geom_polygon(aes_string(fill= "SB_Total"), size = 0.2) +
-  scale_fill_gradient(low = "#fef8b7", high = "#ffe841", na.value = "white") +
-  new_scale_fill() +
-  geom_polygon(aes_string(fill = "No_SB_Total"), size = 0.2) +
-  scale_fill_gradient(low = "#d1d1d1", high = "#282828", na.value = "blank")
+  scale_fill_gradient(low = "#fffcdf", high = "#f1ce22", na.value = "white") +
+  new_scale_fill() + 
+  geom_polygon(aes_string(fill= "No_SB_Total"), size = 0.2) +
+  scale_fill_gradient(low = "#f1f1f1", high = "#1c1c1c", na.value = "transparent")
 
 
 # Significance Testing ------------------
