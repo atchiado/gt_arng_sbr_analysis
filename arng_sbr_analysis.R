@@ -1,13 +1,17 @@
 library(tidyverse)
 library(ggdist)
 library(gghalves)
+library(ggnewscale)
+library(maps)
 
 
 # Load Data ------------------
 sbr <- read.csv("~/Desktop/work/data/r/gt_arng_sbr_analysis/arng_sb_data.csv")
+long_lat <- map_data("state")
 
 
 # Data Viz --------------------
+# Create a density plot
 ggplot(sbr, aes(SB_Recruiter, Total, fill = factor(SB_Recruiter), color = factor(SB_Recruiter))) + 
   stat_halfeye(adjust = .5, width = .6, .width = 0, justification = -.3, point_color = NA) + 
   geom_point(size = 1.3, alpha = .5, position = position_jitter(seed = 1, width = .1)) +
@@ -20,7 +24,17 @@ ggplot(sbr, aes(SB_Recruiter, Total, fill = factor(SB_Recruiter), color = factor
   theme(legend.position = "none",
         panel.grid.major.y = element_blank(),
         panel.grid.minor.x = element_blank()) +
-  coord_flip()
+  coord_flip() +
+  theme(plot.margin = margin(1,1.5,0.5,1, "cm"),
+        plot.background = element_rect(fill = "grey98"))
+
+# Create a choropleth map grouped by sb recruiter status
+ggplot(sbr, aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes_string(fill= "SB_Total"), size = 0.2) +
+  scale_fill_gradient(low = "#fef8b7", high = "#ffe841", na.value = "white") +
+  new_scale_fill() +
+  geom_polygon(aes_string(fill = "No_SB_Total"), size = 0.2) +
+  scale_fill_gradient(low = "#d1d1d1", high = "#282828", na.value = "blank")
 
 
 # Significance Testing ------------------
